@@ -154,6 +154,12 @@ export function ScavengerHuntLeaderboard() {
                 <CardTitle className="text-3xl font-bold text-center mb-2">
                     OMRS25 Scavenger Hunt
                 </CardTitle>
+                <a href="https://om.rs/25hunt">
+                <CardTitle className="text-2xl font-bold text-center  mb-2">
+                    Join the challenge here:&nbsp;
+                    <span className="text-blue-400">om.rs/25hunt</span>
+                </CardTitle>
+                </a>
                 <p className="text-muted-foreground text-center">
                     Current Leaderboard
                 </p>
