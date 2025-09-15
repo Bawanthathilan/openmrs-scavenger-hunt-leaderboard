@@ -8,7 +8,7 @@ import { Trophy, Medal, Award } from "lucide-react"
 interface LeaderboardEntry {
   timestamp: string
   openmrsId: string
-  taskId: number
+  score: number
 }
 
 interface ProcessedEntry {
@@ -26,11 +26,11 @@ export function ScavengerHuntLeaderboard() {
     fetchLeaderboardData()
   }, [])
 
-  const fetchLeaderboardData = async () => {
+ const fetchLeaderboardData = async () => {
     try {
       setLoading(true)
       const response = await fetch(
-        "https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLhuLihfabK0dtgTXZlmD9NAwmuVW-axsjHy2U8496cOFCr5qoUm60vdcU3DQfRtUnGQiXJXxlLcNDk2mbj52vuzfaC0CE0c9G1H61dIuhrxVsTxqjEX-BqBIloxST730dU4DemqQnMFQgJ3ll6RP8zMTmRE9mr92D2gGmsHNIy_Ljzk1zIb9lx0CAudV6r_2BnnBGDsVdmjUrh-3qqnH9c8CTwt6yx0yDwOrH0ib0Oe9Ve5clxLHu05hyDO6RFKh6lS2RFAZY-hXX2XvpkJDdMKEgIkdA&lib=MHakeFYilqMV2Gs2s46ctyABx2wiTu6LV",
+        "https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLhbEn4Z2bPFnNkzt1WNe3Xh5I-bEPnntQvRStsiyqTebV7aMd3KNtjKUdHuS_MqCGhDN9tbwTnA56gNi2qlCJZD-caCohejJ_QNXBoCVuZNuh0Cyth_K_9OgPnYfShs8Ryb3O_b4MAeiy6oHn-Iosr6FDXhiB4J8HrI7U985gJnsEw3bOlSrx_uCSMyvESppYX-uzUTxiL8fvh6SLlhJ2OWBwHQnLm7k0NrmpMuml1YoUyLK92gj3NILlL0tF_eGMGBG5wIC42e_7QN1UtD2ID7kgy4WQ&lib=MHakeFYilqMV2Gs2s46ctyABx2wiTu6LV",
       )
 
       if (!response.ok) {
@@ -39,16 +39,15 @@ export function ScavengerHuntLeaderboard() {
 
       const data: LeaderboardEntry[] = await response.json()
 
-      const userTaskCount = new Map<string, number>()
+      const userScores = new Map<string, number>()
 
       data.forEach((entry) => {
-        const currentTaskCount = userTaskCount.get(entry.openmrsId) || 0
-        userTaskCount.set(entry.openmrsId, currentTaskCount + 1)
+        const currentScore = userScores.get(entry.openmrsId) || 0
+        userScores.set(entry.openmrsId, currentScore + entry.score)
       })
 
-      // Convert to array and sort by points (descending)
-      const sortedEntries = Array.from(userTaskCount.entries())
-        .map(([username, taskCount]) => ({ username, points: taskCount * 10 }))
+      const sortedEntries = Array.from(userScores.entries())
+        .map(([username, totalScore]) => ({ username, points: totalScore }))
         .sort((a, b) => b.points - a.points)
         .map((entry, index) => ({ ...entry, rank: index + 1 }))
 
