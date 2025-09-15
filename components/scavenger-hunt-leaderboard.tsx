@@ -152,7 +152,7 @@ export function ScavengerHuntLeaderboard() {
         <Card className="w-full">
             <CardHeader>
                 <CardTitle className="text-3xl font-bold text-center mb-2">
-                    Scavenger Hunt
+                    OMRS25 Scavenger Hunt
                 </CardTitle>
                 <p className="text-muted-foreground text-center">
                     Current Leaderboard
