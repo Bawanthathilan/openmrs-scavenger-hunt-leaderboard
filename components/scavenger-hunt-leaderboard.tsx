@@ -39,14 +39,27 @@ const fetchLeaderboardData = async () => {
 
       const data: LeaderboardEntry[] = await response.json()
 
+      // Create a map to store only the latest submission for each user
       const latestSubmissions = new Map<string, LeaderboardEntry>()
 
       data.forEach((entry) => {
         const existingEntry = latestSubmissions.get(entry.openmrsId)
-        if (!existingEntry || new Date(entry.timestamp) > new Date(existingEntry.timestamp)) {
+        const currentTimestamp = new Date(entry.timestamp).getTime()
+
+        if (!existingEntry) {
+          // First entry for this user
           latestSubmissions.set(entry.openmrsId, entry)
+        } else {
+          const existingTimestamp = new Date(existingEntry.timestamp).getTime()
+          if (currentTimestamp > existingTimestamp) {
+            // Current entry is newer, replace the existing one
+            latestSubmissions.set(entry.openmrsId, entry)
+          } else {
+
+          }
         }
       })
+
 
       const sortedEntries = Array.from(latestSubmissions.values())
         .map((entry) => ({ username: entry.openmrsId, points: entry.score }))
