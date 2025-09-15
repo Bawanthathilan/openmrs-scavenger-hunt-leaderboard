@@ -5,7 +5,7 @@ import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'OpenMRS Scavenger Hunt',
+  title: 'OMRS25 Scavenger Hunt',
 }
 
 export default function RootLayout({
