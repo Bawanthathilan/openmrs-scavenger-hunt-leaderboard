@@ -26,7 +26,7 @@ export function ScavengerHuntLeaderboard() {
     fetchLeaderboardData()
   }, [])
 
- const fetchLeaderboardData = async () => {
+const fetchLeaderboardData = async () => {
     try {
       setLoading(true)
       const response = await fetch(
@@ -39,15 +39,17 @@ export function ScavengerHuntLeaderboard() {
 
       const data: LeaderboardEntry[] = await response.json()
 
-      const userScores = new Map<string, number>()
+      const latestSubmissions = new Map<string, LeaderboardEntry>()
 
       data.forEach((entry) => {
-        const currentScore = userScores.get(entry.openmrsId) || 0
-        userScores.set(entry.openmrsId, currentScore + entry.score)
+        const existingEntry = latestSubmissions.get(entry.openmrsId)
+        if (!existingEntry || new Date(entry.timestamp) > new Date(existingEntry.timestamp)) {
+          latestSubmissions.set(entry.openmrsId, entry)
+        }
       })
 
-      const sortedEntries = Array.from(userScores.entries())
-        .map(([username, totalScore]) => ({ username, points: totalScore }))
+      const sortedEntries = Array.from(latestSubmissions.values())
+        .map((entry) => ({ username: entry.openmrsId, points: entry.score }))
         .sort((a, b) => b.points - a.points)
         .map((entry, index) => ({ ...entry, rank: index + 1 }))
 
