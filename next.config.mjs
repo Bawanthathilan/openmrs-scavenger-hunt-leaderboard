@@ -9,6 +9,8 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  output: 'export',
+  basePath: '/openmrs-scavenger-hunt-leaderboard',
 }
 
 export default nextConfig
